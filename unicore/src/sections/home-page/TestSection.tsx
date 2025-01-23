@@ -1,6 +1,6 @@
 const TestSection = () => {
     return (
-      <section className="bg-silver">
+      <section className="container bg-silver">
         <div>
             <p>main</p>
         </div>
