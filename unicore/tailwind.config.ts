@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        silver: '#e4e4e4',
+        silver: '#fff',
         royalBlue: '#30378e',
       },
       fontFamily: {
@@ -23,6 +23,21 @@ const config: Config = {
         xl: ['22px', { lineHeight: '32px' }],
       },
     },
+    container: {
+      center: true,
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+      },
+      padding: {
+        DEFAULT: "24px",
+        "2xl": "100px",
+      },
+    },
+    
   },
   plugins: [],
 };
