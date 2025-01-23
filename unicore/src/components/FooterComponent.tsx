@@ -2,7 +2,9 @@
 import { useRouter } from "next/navigation";
 import InstaIcon from "../../images/icon-instagram.svg";
 import LnIcon from "../../images/icon-linkedin.svg";
-import TikTokIcon from "../../images/icon-tiktok.svg";
+// import TikTokIcon from "../../images/icon-tiktok.svg";
+import FacebookIcon from "../../images/icon-facebook.svg";
+import XIcon from "../../images/icon-x.svg";
 import Image from "next/image";
 
 const navLinks = [
@@ -11,8 +13,6 @@ const navLinks = [
   { name: "Support", path: "/" },
   { name: "Contact", path: "/" },
 ];
-
-// https://www.linkedin.com/company/uni-core
 
 const Footer = () => {
   const router = useRouter();
@@ -47,7 +47,7 @@ const Footer = () => {
             />
           </a>
           <a
-            href="https://www.instagram.com"
+            href="https://www.instagram.com/unicore.inc?igsh=MXQzbzFhMGRnbjZpdQ%3D%3D&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -59,7 +59,7 @@ const Footer = () => {
               className="md:w-[32px]"
             />
           </a>
-          <a
+          {/* <a
             href="https://www.tiktok.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -67,6 +67,32 @@ const Footer = () => {
             <Image
               src={TikTokIcon}
               alt="TikTok"
+              width={24}
+              height={24}
+              className="md:w-[32px]"
+            />
+          </a> */}
+          <a
+            href="https://www.facebook.com/share/1Wdfhm9xWJ/?mibextid=wwXIfr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src={FacebookIcon}
+              alt="facebook"
+              width={24}
+              height={24}
+              className="md:w-[32px]"
+            />
+          </a>
+          <a
+            href="https://x.com/unicore_inc?s=21"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src={XIcon}
+              alt="X"
               width={24}
               height={24}
               className="md:w-[32px]"
