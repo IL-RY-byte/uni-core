@@ -22,7 +22,7 @@ const config: Config = {
         default: ["16px", { lineHeight: "24px" }],
         xs: ["16px", { lineHeight: "22px" }],
         xl: ["20px", { lineHeight: "28px" }],
-        "2xl": ["40px", { lineHeight: "48px" }],
+        "2xl": ["38px", { lineHeight: "48px" }],
       },
     },
     container: {

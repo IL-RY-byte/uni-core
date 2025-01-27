@@ -5,12 +5,12 @@ const FirstScreen = () => {
   const router = useRouter();
 
   return (
-    <section className="w-full flex flex-col items-center justify-center md:min-h-[30vh] lg:min-h-[100vh]">
-      <h1 className="text-2xl font-bold text-center">
+    <section className="container w-full flex flex-col items-center justify-center sm:min-h-[500px] lg:min-h-[90vh]">
+      <h1 className="text-[28px] sm:text-2xl font-bold text-center">
         Welcome to UniCore - Your <br /> Comprehensive University <br />{" "}
         Management Platform
       </h1>
-      <p className="mt-4 text-center">
+      <p className="mt-4 text-center max-w-[350px] sm:w-full">
         Empowering students, teachers, and administration for a seamless <br />{" "}
         educational experience
       </p>

@@ -19,11 +19,11 @@ const features = [
 
 const KeyFeatures = () => {
   return (
-    <section className="py-12 ld:py-0 w-full md:min-h-[30vh] lg:min-h-[100vh] flex flex-col lg:flex-row items-center justify-between">
+    <section className="container py-12 ld:py-0 w-full md:min-h-[30vh] lg:min-h-[100vh] flex flex-col lg:flex-row items-center justify-between">
       {/* Left Section */}
       <div className="md:w-1/2 text-left">
-        <h2 className="text-2xl font-bold">Key Features Overview</h2>
-        <p className="mt-2">Discover the benefits of using UniCore</p>
+        <h2 className="text-[28px] sm:text-2xl font-bold">Key Features Overview</h2>
+        <p className="mt-2 mb-4">Discover the benefits of using UniCore</p>
       </div>
 
       {/* Right Section */}

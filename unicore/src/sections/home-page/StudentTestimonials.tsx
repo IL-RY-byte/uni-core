@@ -23,11 +23,11 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const StudentTestimonials = () => {
   return (
-    <div className="w-full">
+    <section className="container w-full">
       <div className="py-12 ld:py-0 max-w-6xl min-w-fit mx-auto flex flex-col lg:flex-row items-center gap-6 md:gap-12">
         {/* Left Section - Title */}
         <div className="md:w-1/2 text-left">
-          <h2 className="text-2xl font-bold">Student Testimonials</h2>
+          <h2 className="text-[28px] sm:text-2xl font-bold">Student Testimonials</h2>
           <p className="mt-2">
             Here&apos;s what users are saying about UniCore
           </p>
@@ -55,7 +55,7 @@ const StudentTestimonials = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
