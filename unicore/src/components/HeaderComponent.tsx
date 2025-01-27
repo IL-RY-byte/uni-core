@@ -17,7 +17,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="w-full lg:h-[80px] md:h-[60px] h-[50px] bg-white border-b-[2px] border-gray-100 flex items-center">
+    <header className="fixed top-0 left-0 w-full z-50 lg:h-[80px] md:h-[60px] h-[50px] bg-white flex items-center shadow-sm">
       <div className="container flex justify-between items-center">
         <button
           className="flex items-center gap-[10px]"
@@ -51,12 +51,12 @@ const Header = () => {
           className="md:hidden text-black text-2xl"
           onClick={() => setIsOpen(!isOpen)}
         >
-          ☰ 
-        </button> 
+          ☰
+        </button>
         {/* тут потім заміним на іконку */}
 
         {isOpen && (
-          <div className="absolute top-[60px] left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4 md:hidden transition-all duration-300 ease-in-out">
+          <div className="z-10 absolute top-[60px] left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4 md:hidden transition-all duration-300 ease-in-out">
             {navLinks.map((link) => (
               <button
                 key={link.path}
