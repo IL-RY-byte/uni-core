@@ -1,4 +1,9 @@
+"use client";
+import { useRouter } from "next/navigation";
+
 const FirstScreen = () => {
+  const router = useRouter();
+
   return (
     <section className="w-full flex flex-col items-center justify-center md:min-h-[30vh] lg:min-h-[100vh]">
       <h1 className="text-2xl font-bold text-center">
@@ -12,9 +17,9 @@ const FirstScreen = () => {
 
       <div className="mt-6 flex md:space-x-4 md:flex-row flex-col md:space-y-0 space-y-4">
         <button className="w-64 px-6 py-3 border border-black font-medium rounded-md hover:bg-gray-100 transition">
-          Register
+          Enter as Guest
         </button>
-        <button className="w-64 px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition">
+        <button className="w-64 px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition" onClick={() => router.push("/auth")}>
           Login
         </button>
       </div>
