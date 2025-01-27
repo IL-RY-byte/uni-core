@@ -3,32 +3,37 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import MochAvatar from "../../../images/auth/unipic.png";
 import { IconCamera } from "@tabler/icons-react";
+import LoaderComponent from "@/components/LoaderComponent";
 
 const InfoSection = () => {
-  const [user, setUser] = useState({
-    status: "",
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
-    avatar: MochAvatar,
-  });
+  const [user, setUser] = useState<{
+    status: string;
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;
+    avatar: any;
+  } | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const storedUser = {
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Симуляція завантаження з бека
+      setUser({
         status: "Guest",
         name: "John",
         surname: "Doe",
         email: "john.doe@example.com",
         phone: "+38034567899",
         avatar: MochAvatar,
-      };
-      setUser(storedUser);
+      });
     };
 
     fetchUserData();
   }, []);
+
+  if (!user) {
+    return <LoaderComponent />;
+  }
 
   return (
     <section className="container bg-silver p-8 rounded-lg">

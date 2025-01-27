@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LogoImage from "../../images/logo.png";
+import { IconMenu2 } from "@tabler/icons-react";
 
 const navLinks = [
   { name: "Features", path: "/auth" },
@@ -48,12 +49,11 @@ const Header = () => {
         </nav>
 
         <button
-          className="md:hidden text-black text-2xl"
+          className="md:hidden text-black"
           onClick={() => setIsOpen(!isOpen)}
         >
-          ☰
+          <IconMenu2 size={32} stroke={2} />
         </button>
-        {/* тут потім заміним на іконку */}
 
         {isOpen && (
           <div className="z-10 absolute top-[60px] left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4 md:hidden transition-all duration-300 ease-in-out">
