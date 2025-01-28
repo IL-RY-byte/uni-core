@@ -121,7 +121,7 @@ const LoginSection = () => {
           </div>
 
           {errors.server && (
-            <p className="text-red-500 text-sm">{errors.server}</p>
+            <p className="text-red-500 text-sm text-center">{errors.server}</p>
           )}
 
           <Button
