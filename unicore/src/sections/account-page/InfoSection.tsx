@@ -12,7 +12,7 @@ const InfoSection = () => {
     surname: string;
     email: string;
     phone: string;
-    avatar: any;
+    avatar: unknown;
   } | null>(null);
 
   useEffect(() => {

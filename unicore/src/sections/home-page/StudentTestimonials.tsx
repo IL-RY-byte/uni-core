@@ -13,7 +13,7 @@ const testimonials = [
 
 const StarRating = ({ rating }: { rating: number }) => {
   return (
-    <div className="flex space-x-1 text-yellow-500">
+    <div className="flex text-yellow-500 space-x-1">
       {Array.from({ length: rating }, (_, i) => (
         <span key={i}>⭐</span>
       ))}
@@ -24,32 +24,28 @@ const StarRating = ({ rating }: { rating: number }) => {
 const StudentTestimonials = () => {
   return (
     <section className="container w-full">
-      <div className="py-12 ld:py-0 max-w-6xl min-w-fit mx-auto flex flex-col lg:flex-row items-center gap-6 md:gap-12">
-        {/* Left Section - Title */}
-        <div className="md:w-1/2 text-left">
-          <h2 className="text-[28px] sm:text-2xl font-bold">Student Testimonials</h2>
+      <div className="mx-auto flex flex-col items-center gap-6 md:gap-12 max-w-6xl min-w-fit pt-12 ld:py-0 lg:flex-row">
+        <div className="text-left lg:w-1/2">
+          <h2 className="text-[28px] sm:text-2xl font-bold">
+            Student Testimonials
+          </h2>
           <p className="mt-2">
             Here&apos;s what users are saying about UniCore
           </p>
         </div>
 
-        {/* Right Section - Testimonials */}
-        <div className="w-full md:w-1/2 flex flex-col md:flex-row items-center justify-left gap-4">
+        <div className="flex flex-col items-center justify-left gap-4 w-full md:flex-row lg:w-1/2">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="w-full md:w-64 bg-gray-100 rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:shadow-lg transition"
+              className="w-full max-w-[300px] sm:max-w-[400px] lg:w-64 bg-gray-100 p-4 flex flex-col space-y-2 rounded-lg shadow-md transition hover:shadow-lg"
             >
-              {/* Avatar & Name */}
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                 <p className="font-bold">{testimonial.name}</p>
               </div>
 
-              {/* Star Rating */}
               <StarRating rating={testimonial.rating} />
-
-              {/* Review */}
               <p className="truncate">{testimonial.review}</p>
             </div>
           ))}

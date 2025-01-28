@@ -19,32 +19,46 @@ const features = [
 
 const KeyFeatures = () => {
   return (
-    <section className="container py-12 ld:py-0 w-full md:min-h-[30vh] lg:min-h-[100vh] flex flex-col lg:flex-row items-center justify-between">
-      {/* Left Section */}
-      <div className="md:w-1/2 text-left">
-        <h2 className="text-[28px] sm:text-2xl font-bold">Key Features Overview</h2>
-        <p className="mt-2 mb-4">Discover the benefits of using UniCore</p>
-      </div>
+    <section className="container flex flex-col items-center justify-center w-full py-12 ld:py-0 md:min-h-[30vh] lg:max-h-[800px]">
+      <h2 className="text-[28px] font-bold sm:text-2xl">
+        Key Features Overview
+      </h2>
+      <p className="mt-2 mb-4">Discover the benefits of using UniCore</p>
 
-      {/* Right Section */}
-      <div className="w-full flex flex-col space-y-4 md:h-[480px] max-w-[520px]">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="flex items-center h-full w-full shadow-sm border-gray-100 border-2 rounded-lg p-4 hover:shadow-lg transition md:gap-11 "
-          >
-            {/* Icon Box */}
-            <div className="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-md text-2xl">
-              {feature.iconText}
+      <div className="flex flex-col gap-[14px] mt-8 lg:flex-row lg:gap-[40px] lg:justify-between">
+        <div className="flex flex-col w-full max-w-[520px] space-y-4 md:h-[480px]">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="flex items-center w-full h-full p-4 transition border-2 border-gray-100 rounded-lg shadow-sm hover:shadow-lg md:gap-11"
+            >
+              <div className="flex items-center justify-center w-12 h-12 text-2xl bg-gray-200 rounded-md">
+                {feature.iconText}
+              </div>
+              <div className="ml-4">
+                <p className="text-xl font-bold">{feature.title}</p>
+                <p>{feature.description}</p>
+              </div>
             </div>
+          ))}
+        </div>
 
-            {/* Text Content */}
-            <div className="ml-4">
-              <p className="font-bold font-xl">{feature.title}</p>
-              <p>{feature.description}</p>
+        <div className="flex flex-col w-full max-w-[520px] space-y-4 md:h-[480px]">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="flex items-center w-full h-full p-4 transition border-2 border-gray-100 rounded-lg shadow-sm hover:shadow-lg md:gap-11"
+            >
+              <div className="flex items-center justify-center w-12 h-12 text-2xl bg-gray-200 rounded-md">
+                {feature.iconText}
+              </div>
+              <div className="ml-4">
+                <p className="text-xl font-bold">{feature.title}</p>
+                <p>{feature.description}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
