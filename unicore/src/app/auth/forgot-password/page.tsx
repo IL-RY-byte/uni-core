@@ -1,11 +1,12 @@
-import AuthPageSection from "@/sections/auth-page/AuthPageSection";
+import PasswordSection from "@/sections/auth-page/PasswordSection";
 
 const Page = () => {
   return (
     <>
-      <AuthPageSection />
+      <PasswordSection />
     </>
   );
 };
 
 export default Page;
+

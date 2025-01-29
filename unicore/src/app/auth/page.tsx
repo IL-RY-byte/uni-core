@@ -1,12 +1,9 @@
-import { MantineProvider } from "@mantine/core";
-import AuthPageSection from "@/sections/auth-page/AuthPageSection"
+import AuthPageSection from "@/sections/auth-page/AuthPageSection";
 
 const Page = () => {
   return (
     <>
-      <MantineProvider>
-        <AuthPageSection/>
-      </MantineProvider>
+      <AuthPageSection />
     </>
   );
 };

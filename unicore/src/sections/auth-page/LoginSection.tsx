@@ -1,18 +1,22 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
-import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
-import ImageUni from "../../../images/auth/unipic.png";
 
 const LoginSection = () => {
   const [visible, { toggle }] = useDisclosure(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "", server: "" });
+  const router = useRouter();
 
   const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
 
   const VisibilityToggleIcon = ({ reveal }: { reveal: boolean }) =>
     reveal ? (
@@ -20,11 +24,6 @@ const LoginSection = () => {
     ) : (
       <IconEyeOff size={16} className="relative left-[4px] top-[16px]" />
     );
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,103 +47,71 @@ const LoginSection = () => {
     }
   };
 
-  const handleGuestLogIn = () => {
-    console.log("Enter as a guest");
-  };
-
   return (
-    <section className="container flex flex-col md:flex-row items-center justify-center md:min-h-screen md:gap-[20px] lg:gap-[130px] xl:gap-[220px]">
-      <div className="flex mb-6 md:mb-0 order-2 md:order-1">
-        <Image
-          src={ImageUni}
-          alt="Wallpaper Uni"
-          width={400}
-          height={300}
-          className="px-[16px] h-auto w-[390px] lg:w-[440px] rounded-lg object-cover"
-        />
-      </div>
-      <div className="w-full md:max-w-[400px] p-6 flex flex-col items-center order-1 md:order-2">
-        <p className="max-w-[240px] lg:max-w-[300px] font-semibold lg:text-[30px] text-[24px] mb-4 text-center mb-[20px]">
-          ARE YOU A MEMBER OF UNICORE?
+    <div className="flex flex-col items-center">
+      <p className="text-center text-[28px] lg:text-[36px]">
+        Welcome Back !
+      </p>
+      <p className="text-center mt-[32px] text-[16px]">
+        Please enter your credentials to log in
+      </p>
+      <form onSubmit={handleSubmit} className="w-full w-[240px] md:w-[320px]">
+        <div className="w-full mb-[20px] mt-[32px]">
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full py-3 px-4 border border-black rounded-[15px]"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-[12px] mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        <div className="w-full relative mt-20px]">
+          <input
+            type={visible ? "text" : "password"}
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full py-3 px-4 border border-black rounded-[15px]"
+          />
+          <div
+            className="absolute right-4 top-[10px] transform -translate-y-1/2 cursor-pointer"
+            onClick={() => toggle()}
+          >
+            <VisibilityToggleIcon reveal={visible} />
+          </div>
+        </div>
+
+        {errors.password && (
+          <p className="text-red-500 text-[12px] mt-1">{errors.password}</p>
+        )}
+
+        <p
+          className="mt-[22px] cursor-pointer hover:text-gray-500"
+          onClick={() => router.push("/auth/forgot-password")}
+        >
+          Forgot password?
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-sm gap-[20px] md:gap-[40px]"
+        {errors.server && (
+          <p className="text-red-500 text-sm text-center">{errors.server}</p>
+        )}
+
+        <button
+          type="submit"
+          className="w-full mt-[48px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition mb-[40px]"
         >
-          <div className="w-full mb-[20px]">
-            <label
-              className="text-[16px] md:text-[19px] font-semibold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full py-3 px-4 border border-gray-300 rounded-md"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-[12px] mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="w-full relative mb-[30px]">
-            <label
-              className="text-[16px] md:text-[19px] font-semibold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              type={visible ? "text" : "password"}
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full py-3 px-4 border border-gray-300 rounded-md"
-            />
-            <div
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
-              onClick={() => toggle()}
-            >
-              <VisibilityToggleIcon reveal={visible} />
-            </div>
-            {errors.password && (
-              <p className="text-red-500 text-[12px] mt-1">{errors.password}</p>
-            )}
-          </div>
-
-          {errors.server && (
-            <p className="text-red-500 text-sm text-center">{errors.server}</p>
-          )}
-
-          <Button
-            type="submit"
-            className="w-full px-6 py-3 border border-black font-medium rounded-md hover:bg-gray-100 transition mb-[40px]"
-          >
-            Log in
-          </Button>
-
-          <p className="lg:text-[30px] text-[20px] font-semibold text-center mb-[20px]">
-            OR JUST WANT TO TRY?
-          </p>
-
-          <Button
-            type="button"
-            className="w-full px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition mb-[30px] md:mb-0"
-            onClick={handleGuestLogIn}
-          >
-            Log in as Guest
-          </Button>
-        </form>
-      </div>
-    </section>
+          Log in
+        </button>
+      </form>
+    </div>
   );
 };
 

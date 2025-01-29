@@ -1,8 +1,6 @@
 "use client";
 
-import LoginSection from "./LoginSection";
-
-const AuthLayout = () => {
+const PasswordSection = () => {
     return (
       <section className="container flex flex-col-reverse lg:flex-row lg:h-[655px] my-[40px] lg:my-[100px] my-[30px]">
 
@@ -15,11 +13,10 @@ const AuthLayout = () => {
         </div>
 
         <div className="w-full lg:w-2/3 bg-gray-200 flex items-center justify-center p-8 relative rounded-t-[30px] lg:rounded-t-[0px] min-h-[655px]">
-          <LoginSection />
         </div>
       </section>
     );
   };
   
 
-export default AuthLayout;
+export default PasswordSection;
