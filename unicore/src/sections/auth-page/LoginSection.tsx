@@ -49,13 +49,11 @@ const LoginSection = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-center text-[28px] lg:text-[36px]">
-        Welcome Back !
-      </p>
+      <p className="text-center text-[32px] lg:text-[40px]">Welcome Back !</p>
       <p className="text-center mt-[32px] text-[16px]">
         Please enter your credentials to log in
       </p>
-      <form onSubmit={handleSubmit} className="w-full w-[240px] md:w-[320px]">
+      <form onSubmit={handleSubmit} className="w-[240px] md:w-[320px]">
         <div className="w-full mb-[20px] mt-[32px]">
           <input
             type="text"
@@ -94,7 +92,7 @@ const LoginSection = () => {
         )}
 
         <p
-          className="mt-[22px] cursor-pointer hover:text-gray-500"
+          className="mt-[22px] cursor-pointer hover:text-gray-500 mb-[20px]"
           onClick={() => router.push("/auth/forgot-password")}
         >
           Forgot password?
@@ -106,9 +104,9 @@ const LoginSection = () => {
 
         <button
           type="submit"
-          className="w-full mt-[48px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition mb-[40px]"
+          className="w-full mt-[18px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition mb-[40px]"
         >
-          Log in
+          LOG IN
         </button>
       </form>
     </div>
