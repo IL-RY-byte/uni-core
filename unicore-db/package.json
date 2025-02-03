@@ -1,0 +1,19 @@
+{
+  "name": "unicore-db",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.4",
+    "drizzle-orm": "^0.39.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0"
+  }
+}
