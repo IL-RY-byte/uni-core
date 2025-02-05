@@ -1,5 +1,6 @@
 import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
+import { verifyPassword } from "@lib/cryptography";
 import { AccessJwtPayload, LoginBodySchema } from "@lib/schemas";
 import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
@@ -29,7 +30,8 @@ const rout = createRoute({
     },
     401: { description: "Invalid credentials." },
   },
-  description: "In response, it will send haeder to store JWT token securely in cookies (name: 'token')."
+  description:
+    "In response, it will send header to store JWT token securely in cookies (name: 'token').",
 });
 
 async function handler(c: AppContext) {
@@ -42,23 +44,16 @@ async function handler(c: AppContext) {
     },
   });
   if (!user) {
-    return c.json({ message: "Invalid credentials." }, 401);
+    return c.json({ message: "Invalid credentials. No such user." }, 401);
   }
 
-  const textEncoder = new TextEncoder();
-  const undigested = textEncoder.encode(password + user.passwordSalt);
-  const digest = await crypto.subtle.digest({ name: "SHA-256" }, undigested);
-  const hash = [...new Uint8Array(digest)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  const isPasswordValid = hash === user.passwordHash;
-  if (!isPasswordValid) {
-    return c.json({ message: "Invalid credentials." }, 401);
+  if (!verifyPassword(password, user.passwordHash, user.passwordSalt)) {
+    return c.json({ message: "Invalid credentials. Wrong password." }, 401);
   }
 
   const payload = {
     login: login,
-    role: "admin",
+    role: "",
     exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
   };
   const token = await sign(payload, c.env.ACCESS_TOKEN_SECRET);
