@@ -24,6 +24,11 @@ database_name = "test-db"
 database_id = "a2325432-487c-4eae-b561-3309eefa692f"
 preview_database_id = "a2325432-487c-4eae-b561-3309eefa692f"
 
+[[kv_namespaces]]
+binding = "KV"
+id = "137cf26972d44eb9b45bb7881cc08be6"
+preview_id = "137cf26972d44eb9b45bb7881cc08be6"
+
 # Environment Variables
 # https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # [vars]

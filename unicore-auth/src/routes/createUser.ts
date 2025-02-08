@@ -2,7 +2,7 @@ import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
 import { hashPassword } from "@lib/cryptography";
 import { CreateUserBodySchema } from "@lib/schemas";
-import { AppContext } from "types";
+import { AppContext } from "@lib/types";
 import { getDB } from "unicore-db";
 import { user } from "unicore-db/src/schema";
 

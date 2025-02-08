@@ -2,12 +2,7 @@ import { z } from "@hono/zod-openapi";
 
 export const LoginBodySchema = z.object({
   login: z.string(),
-  password: z.string(),
-  // .min(8)
-  // .regex(
-  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-  //   "Must contain at least one lowercase letter. Must contain at least one uppercase letter. Must contain at least one digit. Must contain at least one special character."
-  // ),
+  password: z.string().min(8),
 });
 
 export const CreateUserBodySchema = z.object({
@@ -16,15 +11,23 @@ export const CreateUserBodySchema = z.object({
     .string()
     .min(8)
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]+$/,
-      "Must contain at least one lowercase letter. Must contain at least one uppercase letter. Must contain at least one digit. Must contain at least one special character."
-    ),
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]+$/
+    )
+    .openapi({
+      description:
+        "Must contain at least one lowercase letter. Must contain at least one uppercase letter. Must contain at least one digit. Must contain at least one special character.",
+    }),
   name: z.string(),
-  surname: z.string()
+  surname: z.string(),
 });
 
-export const AccessJwtPayload = z.object({
-  login: z.string(),
-  role: z.enum(["admin", "student", "proffesor"]),
-  exp: z.string().openapi({ description: "Expiary unix timestamp." }),
+export const userSession = z.object({
+  userId: z.string(),
+  roles: z.array(z.string()),
+});
+
+export const LoginResponse = z.object({
+  sessionId: z
+    .string()
+    .openapi({ description: "JWT token containing session id." }),
 });

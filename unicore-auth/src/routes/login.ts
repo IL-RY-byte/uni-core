@@ -1,10 +1,15 @@
 import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
-import { verifyPassword } from "@lib/cryptography";
-import { AccessJwtPayload, LoginBodySchema } from "@lib/schemas";
+import {
+  generateSessionId,
+  signString,
+  verifyPassword,
+} from "@lib/cryptography";
+import { getUserWithRoles } from "@lib/db-utils";
+import { LoginResponse, LoginBodySchema } from "@lib/schemas";
+import { storeSession } from "@lib/session-utils";
 import { setCookie } from "hono/cookie";
-import { sign } from "hono/jwt";
-import { AppContext } from "types";
+import { AppContext } from "@lib/types";
 import { getDB } from "unicore-db";
 
 const rout = createRoute({
@@ -23,7 +28,7 @@ const rout = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: AccessJwtPayload,
+          schema: LoginResponse,
         },
       },
       description: "JWT payload.",
@@ -38,28 +43,28 @@ async function handler(c: AppContext) {
   const { login, password } = await c.req.json();
 
   const db = getDB(c.env);
-  const user = await db.query.user.findFirst({
-    where(fields, operators) {
-      return operators.eq(fields.login, login);
-    },
-  });
-  if (!user) {
-    return c.json({ message: "Invalid credentials. No such user." }, 401);
-  }
+  const user = await getUserWithRoles(db, login);
 
-  if (!verifyPassword(password, user.passwordHash, user.passwordSalt)) {
+  if (!user) return c.json({ message: "Invalid credentials." }, 401);
+  else if (!verifyPassword(password, user.passwordHash, user.passwordSalt))
     return c.json({ message: "Invalid credentials. Wrong password." }, 401);
-  }
 
-  const payload = {
-    login: login,
-    role: "",
-    exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
-  };
-  const token = await sign(payload, c.env.ACCESS_TOKEN_SECRET);
+  const sessionId = generateSessionId();
+  await storeSession(c.env.KV, sessionId, {
+    userId: user.idUser,
+    roles: user.roles,
+  });
+
+  const signature = await signString(
+    sessionId,
+    c.env.ACCESS_TOKEN_SECRET,
+    "SHA-256"
+  );
+  const token = `${sessionId}.${signature}`;
+
   setCookie(c, "token", token, { httpOnly: true, secure: true });
 
-  return c.json({ payload }, 200);
+  return c.json({ token }, 200);
 }
 
 const loginRouter = createRouter().openapi(rout, handler);

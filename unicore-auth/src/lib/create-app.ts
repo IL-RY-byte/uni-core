@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { logger } from "hono/logger";
-import { AppBindings, AppOpenAPI } from "types";
+import { AppBindings, AppOpenAPI } from "@lib/types";
 
 export function configureOpenApi(app: AppOpenAPI) {
   app.doc("/doc", {
@@ -13,7 +13,21 @@ export function configureOpenApi(app: AppOpenAPI) {
 }
 
 export function createRouter() {
-  return new OpenAPIHono<AppBindings>({ strict: false });
+  return new OpenAPIHono<AppBindings>({
+    defaultHook: (result, c) => {
+      if (!result.success) {
+        return c.json(
+          {
+            ok: false,
+            errors: result.error,
+            source: "zod_error_handler",
+          },
+          422
+        );
+      }
+    },
+    strict: false,
+  });
 }
 
 export function createApp() {
