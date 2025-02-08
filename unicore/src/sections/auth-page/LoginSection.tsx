@@ -62,7 +62,7 @@ const LoginSection = () => {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full py-3 px-4 border border-black rounded-[15px]"
+            className="w-full py-3 px-4 border border-black rounded-md"
           />
           {errors.email && (
             <p className="text-red-500 text-[12px] mt-1">{errors.email}</p>
@@ -77,7 +77,7 @@ const LoginSection = () => {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full py-3 px-4 border border-black rounded-[15px]"
+            className="w-full py-3 px-4 border border-black rounded-md"
           />
           <div
             className="absolute right-4 top-[10px] transform -translate-y-1/2 cursor-pointer"
@@ -104,7 +104,7 @@ const LoginSection = () => {
 
         <button
           type="submit"
-          className="w-full mt-[18px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition mb-[40px]"
+          className="w-full mt-[18px] bg-black text-white px-6 py-3 border border-black font-medium rounded-md hover:bg-gray-900 transition"
         >
           LOG IN
         </button>

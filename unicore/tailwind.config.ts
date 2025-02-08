@@ -17,6 +17,7 @@ const config: Config = {
         lato: ["Lato", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
         roboto: ["var(--font-roboto)", "sans-serif"],
+        montserrat: ["var(--font-montserrat)", "sans-serif"],
       },
       fontSize: {
         default: ["16px", { lineHeight: "24px" }],

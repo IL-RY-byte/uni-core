@@ -36,13 +36,13 @@ const ForgetPasswordForm = ({ goToStep }: ForgetPasswordFormProps) => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full py-3 px-4 border border-black rounded-[15px]"
+          className="w-full py-3 px-4 border border-black rounded-md"
         />
         {error && <p className="text-red-500 text-[12px] mt-1">{error}</p>}
 
         <button
           type="submit"
-          className="w-full mt-[32px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition"
+          className="w-full mt-[32px] bg-black text-white px-6 py-3 border border-black font-medium rounded-md hover:bg-gray-900 transition"
         >
           RESET PASSWORD
         </button>

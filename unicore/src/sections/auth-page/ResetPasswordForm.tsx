@@ -73,7 +73,7 @@ const ResetPasswordForm = () => {
             placeholder="New Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full py-3 px-4 border border-black rounded-[15px]"
+            className="w-full py-3 px-4 border border-black rounded-md"
           />
           <div
             className="absolute right-4 top-[10px] transform -translate-y-1/2 cursor-pointer"
@@ -94,7 +94,7 @@ const ResetPasswordForm = () => {
             placeholder="Confirm new Password"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-full py-3 px-4 border border-black rounded-[15px]"
+            className="w-full py-3 px-4 border border-black rounded-md"
           />
           <div
             className="absolute right-4 top-[10px] transform -translate-y-1/2 cursor-pointer"
@@ -109,7 +109,7 @@ const ResetPasswordForm = () => {
 
         <button
           type="submit"
-          className="w-full mt-[32px] bg-black text-white px-6 py-3 border border-black font-medium rounded-[15px] hover:bg-gray-900 transition"
+          className="w-full mt-[32px] bg-black text-white px-6 py-3 border border-black font-medium rounded-md hover:bg-gray-900 transition"
         >
           RESET PASSWORD
         </button>
