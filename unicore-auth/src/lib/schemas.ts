@@ -21,13 +21,14 @@ export const CreateUserBodySchema = z.object({
   surname: z.string(),
 });
 
-export const userSession = z.object({
-  userId: z.string(),
-  roles: z.array(z.string()),
+export const AuthCookieSchema = z.object({
+  token: z.string().describe("Session token stored in cookies."),
 });
 
-export const LoginResponse = z.object({
-  sessionId: z
-    .string()
-    .openapi({ description: "JWT token containing session id." }),
+export const LoginResponseSchema = z.object({
+  token: z.string().describe("Signed session token."),
+});
+
+export const ErrorResponseSchema = z.object({
+  message: z.string().describe("Error message."),
 });

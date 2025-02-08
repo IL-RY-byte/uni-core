@@ -2,7 +2,6 @@ import { verifySignedString } from "@lib/cryptography";
 import { getSession } from "@lib/session-utils";
 import { Next } from "hono/types";
 import { getCookie } from "hono/cookie";
-import { HTTPException } from "hono/http-exception";
 import { AppContext, SessionContext } from "@lib/types";
 
 export default async function sessionMiddleware(c: AppContext, next: Next) {
@@ -11,9 +10,12 @@ export default async function sessionMiddleware(c: AppContext, next: Next) {
   const ACCESS_TOKEN_SECRET = c.env.ACCESS_TOKEN_SECRET;
 
   if (!token) {
-    throw new HTTPException(401, {
-      message: "Unauthorized: No token provided",
-    });
+    return c.json(
+      {
+        message: "Unauthorized: No token provided",
+      },
+      401
+    );
   }
 
   const [sessionId, signature] = token.split(".");

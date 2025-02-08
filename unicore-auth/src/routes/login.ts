@@ -6,7 +6,11 @@ import {
   verifyPassword,
 } from "@lib/cryptography";
 import { getUserWithRoles } from "@lib/db-utils";
-import { LoginResponse, LoginBodySchema } from "@lib/schemas";
+import {
+  LoginResponseSchema,
+  LoginBodySchema,
+  ErrorResponseSchema,
+} from "@lib/schemas"; // Import schemas
 import { storeSession } from "@lib/session-utils";
 import { setCookie } from "hono/cookie";
 import { AppContext } from "@lib/types";
@@ -28,43 +32,71 @@ const rout = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: LoginResponse,
+          schema: LoginResponseSchema,
         },
       },
-      description: "JWT payload.",
+      description:
+        "Successfully authenticated. Returns a signed session token in JSON and sets it as an HTTP-only cookie.",
     },
-    401: { description: "Invalid credentials." },
+    401: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Invalid credentials (wrong login or password).",
+    },
+    500: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Internal server error.",
+    },
   },
   description:
-    "In response, it will send header to store JWT token securely in cookies (name: 'token').",
+    "Authenticates a user and returns a signed session token. The token is also stored as an HTTP-only cookie.",
 });
 
 async function handler(c: AppContext) {
-  const { login, password } = await c.req.json();
+  try {
+    const { login, password } = await c.req.json();
 
-  const db = getDB(c.env);
-  const user = await getUserWithRoles(db, login);
+    const db = getDB(c.env);
+    const user = await getUserWithRoles(db, login);
 
-  if (!user) return c.json({ message: "Invalid credentials." }, 401);
-  else if (!verifyPassword(password, user.passwordHash, user.passwordSalt))
-    return c.json({ message: "Invalid credentials. Wrong password." }, 401);
+    if (!user) {
+      return c.json({ message: "Invalid credentials." }, 401);
+    }
 
-  const sessionId = generateSessionId();
-  await storeSession(c.env.KV, sessionId, {
-    userId: user.idUser,
-    roles: user.roles,
-  });
+    if (!verifyPassword(password, user.passwordHash, user.passwordSalt)) {
+      return c.json({ message: "Invalid credentials." }, 401);
+    }
 
-  const signature = await signString(
-    sessionId,
-    c.env.ACCESS_TOKEN_SECRET,
-    "SHA-256"
-  );
-  const token = `${sessionId}.${signature}`;
+    // Generate session
+    const sessionId = generateSessionId();
+    await storeSession(c.env.KV, sessionId, {
+      userId: user.idUser,
+      roles: user.roles,
+    });
 
-  setCookie(c, "token", token, { httpOnly: true, secure: true });
+    // Sign session and set token
+    const signature = await signString(
+      sessionId,
+      c.env.ACCESS_TOKEN_SECRET,
+      "SHA-256"
+    );
+    const token = `${sessionId}.${signature}`;
 
-  return c.json({ token }, 200);
+    // Set HTTP-only cookie with the token
+    setCookie(c, "token", token, { httpOnly: true, secure: true });
+
+    return c.json({ token }, 200);
+  } catch (error) {
+    console.error(error);
+    return c.json({ message: "Internal server error." }, 500);
+  }
 }
 
 const loginRouter = createRouter().openapi(rout, handler);

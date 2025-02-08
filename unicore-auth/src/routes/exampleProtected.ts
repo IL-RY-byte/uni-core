@@ -7,7 +7,7 @@ import { getDB } from "unicore-db";
 const router = createRouter().use(sessionMiddleware).use(requireRoleMiddleware("ADMIN"));
 
 router.get(
-  "/test_secret",
+  "/",
   async (c: SessionContext) => {
     const db = getDB(c.env);
     const userSession = c.get("userSession");
