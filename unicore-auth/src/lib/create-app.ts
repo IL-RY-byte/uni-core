@@ -1,8 +1,9 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { logger } from "hono/logger";
 import { AppBindings, AppOpenAPI } from "@lib/types";
+import { swaggerUI } from "@hono/swagger-ui";
 
-export function configureOpenApi(app: AppOpenAPI) {
+export function setupDocs(app: AppOpenAPI) {
   app.doc("/doc", {
     openapi: "3.0.0",
     info: {
@@ -10,6 +11,7 @@ export function configureOpenApi(app: AppOpenAPI) {
       title: "Unicore Auth API",
     },
   });
+  app.get("/swagger", swaggerUI({ url: "/doc" }));
 }
 
 export function createRouter() {
