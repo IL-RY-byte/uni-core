@@ -10,11 +10,11 @@ import { relations } from "drizzle-orm";
 export const profileInfo = sqliteTable("ProfileInfo", {
   idProfileInfo: integer("idProfileInfo").primaryKey({ autoIncrement: true }),
   phoneNumber: text("phoneNumber").unique(),
-  email: text("email").notNull().unique(),
-  faculty: text("faculty").notNull(),
-  program: text("program").notNull(),
+  email: text("email").unique(),
+  faculty: text("faculty"),
+  program: text("program"),
   groupa: text("groupa"),
-  admissionYear: integer("admissionYear").notNull(),
+  admissionYear: integer("admissionYear"),
   createdAt: text("createdAt")
     .notNull()
     .default(sql`(current_timestamp)`),
