@@ -1,8 +1,10 @@
+import InfoSection from "@/sections/account-page/InfoSection";
 const Page = () => {
-    return (
-      <>
-      </>
-    );
-  };
-  
-  export default Page;
+  return (
+    <>
+      <InfoSection />
+    </>
+  );
+};
+
+export default Page;
