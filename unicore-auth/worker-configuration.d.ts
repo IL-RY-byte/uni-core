@@ -3,5 +3,8 @@
 interface Env {
 	KV: KVNamespace;
 	ACCESS_TOKEN_SECRET: string;
+	ALLOWED_ORIGIN: string;
+	COOKIE_DOMAIN: string;
+	API_BASE_URL: string;
 	DB: D1Database;
 }

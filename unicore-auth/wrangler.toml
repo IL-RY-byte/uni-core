@@ -31,8 +31,10 @@ preview_id = "137cf26972d44eb9b45bb7881cc08be6"
 
 # Environment Variables
 # https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+ALLOWED_ORIGIN = "http://localhost:3000"
+COOKIE_DOMAIN = "localhost"
+API_BASE_URL = "https://uni-core-auth.unicore-feedback.workers.dev/" 
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/
