@@ -10,19 +10,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        silver: "#fff",
-        royalBlue: "#30378e",
+        silver: '#fff',
+        royalBlue: '#30378e',
       },
       fontFamily: {
-        lato: ["Lato", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        roboto: ["var(--font-roboto)", "sans-serif"],
+        lato: ['Lato', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
       fontSize: {
-        default: ["16px", { lineHeight: "24px" }],
-        xs: ["16px", { lineHeight: "22px" }],
-        xl: ["20px", { lineHeight: "28px" }],
-        "2xl": ["40px", { lineHeight: "48px" }],
+        default: ['14px', { lineHeight: '18px' }],
+        xs: ['16px', { lineHeight: '22px' }],
+        xl: ['22px', { lineHeight: '32px' }],
       },
     },
     container: {
@@ -39,6 +37,7 @@ const config: Config = {
         "2xl": "100px",
       },
     },
+    
   },
   plugins: [],
 };
