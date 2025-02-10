@@ -104,7 +104,7 @@ async function postHandler(c: AppContext) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
-    if (!verifyPassword(password, user.passwordHash, user.passwordSalt)) {
+    if (!(await verifyPassword(password, user.passwordHash, user.passwordSalt))) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
