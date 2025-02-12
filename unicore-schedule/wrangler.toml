@@ -1,0 +1,14 @@
+# For more details on how to configure Wrangler, refer to:
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "uni-core-schedule"
+main = "src/index.ts"
+compatibility_date = "2025-02-12"
+
+[observability]
+enabled = true
+
+[vars]
+ALLOWED_ORIGIN = "http://localhost:3000"
+COOKIE_DOMAIN = "localhost"
+API_BASE_URL = "https://uni-core-schedule.unicore-feedback.workers.dev/"
