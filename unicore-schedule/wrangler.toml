@@ -11,4 +11,9 @@ enabled = true
 [vars]
 ALLOWED_ORIGIN = "http://localhost:3000"
 COOKIE_DOMAIN = "localhost"
-API_BASE_URL = "https://uni-core-schedule.unicore-feedback.workers.dev/"
+#API_BASE_URL = "https://uni-core-schedule.unicore-feedback.workers.dev/"
+API_BASE_URL = "http://localhost:3000"
+TENANT_ID = "f8cdef31-a31e-4b4a-93e4-5f571e91255a"
+CLIENT_ID = "67726b79-2489-4ffb-9fea-337abbf73b0b"
+CLIENT_SECRET = "3731d992-7651-49d9-9688-9daf78a148d4"
+GRAPH_API_URL = "https://graph.microsoft.com/v1.0"
