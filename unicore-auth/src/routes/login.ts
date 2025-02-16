@@ -128,6 +128,7 @@ async function postHandler(c: AppContext) {
       httpOnly: true,
       secure: true,
       domain: c.env.COOKIE_DOMAIN,
+      path: "/"
     });
 
     return c.json({ token }, 200);
