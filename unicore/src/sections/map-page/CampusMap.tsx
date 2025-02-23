@@ -5,7 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { campusLocations, defaultLocation } from "@/lib/mapData";
 
-const CampusMap: React.FC = () => {
+const CampusMap = () => {
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {

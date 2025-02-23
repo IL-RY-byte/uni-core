@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SidebarSection from "./SidebarSection";
 import {
@@ -17,26 +18,33 @@ interface MenuItem {
   name: string;
   icon: React.FC<IconProps>;
   section: string;
-}
-
-interface AccountItem {
-  name: string;
-  icon: React.FC<IconProps>;
+  href?: string;
 }
 
 const Sidebar = () => {
+  const router = useRouter();
   const [selected, setSelected] = useState("Catalog");
 
   const menuItems: MenuItem[] = [
-    { name: "Dashboard", icon: IconLayoutDashboard, section: "Quick access" },
-    { name: "Catalog", icon: IconBook, section: "Services" },
-    { name: "Operations", icon: IconBook, section: "Services" },
-    { name: "Users", icon: IconUsers, section: "Services" },
-    { name: "Branches", icon: IconBuilding, section: "Services" },
-    { name: "Map", icon: IconMap, section: "Services" },
+    {
+      name: "Dashboard",
+      icon: IconLayoutDashboard,
+      section: "Quick access",
+      href: "/dash",
+    },
+    { name: "Catalog", icon: IconBook, section: "Services", href: "/dash" },
+    { name: "Operations", icon: IconBook, section: "Services", href: "/dash" },
+    { name: "Users", icon: IconUsers, section: "Services", href: "/dash" },
+    {
+      name: "Branches",
+      icon: IconBuilding,
+      section: "Services",
+      href: "/dash",
+    },
+    { name: "Map", icon: IconMap, section: "Services", href: "/dash/map" },
   ];
 
-  const accountItems: AccountItem[] = [
+  const accountItems = [
     { name: "Log Out", icon: IconLogout },
     { name: "Notifications", icon: IconBell },
   ];
@@ -63,7 +71,10 @@ const Sidebar = () => {
             items={items.map((item) => ({
               title: item.name,
               icon: item.icon,
-              callback: () => setSelected(item.name),
+              callback: () => {
+                setSelected(item.name);
+                if (item.href) router.push(item.href);
+              },
               active: selected === item.name,
             }))}
           />
@@ -79,7 +90,6 @@ const Sidebar = () => {
             callback: () => {
               /* add account action here */
             },
-            active: false,
           }))}
         />
       </div>
