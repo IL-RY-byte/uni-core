@@ -33,6 +33,14 @@ export const testSchedule: ScheduleResponse = {
       teacher: "Dr. Smith",
     },
     {
+      id: "11",
+      subject: "Mathematics",
+      start: "2025-02-19T10:00:00",
+      end: "2025-02-19T10:30:00",
+      location: "Room 101",
+      teacher: "Dr. Smith",
+    },
+    {
       id: "2",
       subject: "Physics",
       start: "2025-02-19T11:00:00",

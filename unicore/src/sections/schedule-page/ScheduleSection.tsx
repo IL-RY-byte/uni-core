@@ -17,6 +17,7 @@ const groupByDay = (schedule: ScheduleEntry[]) => {
 };
 
 const ScheduleSection = () => {
+
   const scheduleByDay = groupByDay(testSchedule.schedule);
   const [scrollPosition, setScrollPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,10 +31,12 @@ const ScheduleSection = () => {
       setScrollPosition(newScrollPosition);
     }
   };
-
+ 
   return (
-    <section className="container bg-silver p-4">
-      <h2 className="text-lg font-semibold mb-4">Weekly Schedule</h2>
+    <section className="flex flex-col container bg-silver">
+       <h2 className="text-[20px] font-bold sm:text-[28px] text-center sm:mt-[30px] lg:mt-[36px] sm:mb-[20px] ">
+       Weekly Schedule
+      </h2>
       <div className="relative overflow-hidden">
         <button
           className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-500 text-white p-2 rounded-md shadow-md"
@@ -41,7 +44,7 @@ const ScheduleSection = () => {
         >
           ◀
         </button>
-        <div ref={containerRef} className="overflow-x-auto flex space-x-4 scroll-smooth">
+        <div ref={containerRef} className="container w-full overflow-x-auto  flex space-x-4 scroll-smooth scrollbar-hidden hide-scrollbar">
           {scheduleByDay.map(({ day, entries }) => (
             <div key={day} className="min-w-[250px] bg-white shadow-md rounded-md p-4">
               <h3 className="text-md font-semibold text-center">{day}</h3>
