@@ -2,14 +2,31 @@ import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
 import { ErrorResponseSchema } from "@lib/schemas";
 import { GetUserResponseSchema } from "@lib/schemas";
-import { AppContext, AppOpenAPI, SessionContext, UserSession } from "@lib/types";
+import {
+  AppContext,
+  AppOpenAPI,
+  SessionContext,
+  UserSession,
+} from "@lib/types";
 import { getDB } from "unicore-db";
 import requireRoleMiddleware from "../middlewares/roleMiddleware";
 import sessionMiddleware from "middlewares/sessionMiddleware";
 
 const rout = createRoute({
-  path: "/get_user/:idUser",
+  path: "/get_user",
   method: "get",
+  parameters: [
+    {
+      name: "idUser",
+      in: "query",
+      required: true,
+      schema: {
+        type: "integer",
+        description: "The ID of the user to retrieve.",
+        example: 1234,
+      },
+    },
+  ],
   responses: {
     200: {
       content: {
@@ -18,6 +35,14 @@ const rout = createRoute({
         },
       },
       description: "User details with profile info and roles.",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request. The 'idUser' query parameter is missing or invalid.",
     },
     403: {
       content: {
@@ -50,7 +75,7 @@ const rout = createRoute({
 
 async function handler(c: AppContext) {
   try {
-    const { idUser } = c.req.param();
+    const idUser = c.req.query("idUser");
     const requestedUserId = Number(idUser);
     const db = getDB(c.env);
 
@@ -129,15 +154,21 @@ async function handler(c: AppContext) {
 // Extra check function: if the user is a STUDENT, they can only access their own profile.
 const checkStudentOwnProfile = (user: UserSession, c: SessionContext) => {
   if (user.roles.includes("STUDENT")) {
-    const { idUser } = c.req.param();
+    const idUser = c.req.query("idUser");
     return Number(idUser) === Number(user.userId);
   }
   return true;
 };
 
-const getUserRouter = (createRouter()
-  .use(sessionMiddleware)
-  .use(requireRoleMiddleware(["TEACHER", "ADMIN"], checkStudentOwnProfile)) as AppOpenAPI)
-  .openapi(rout, handler);
+const getUserRouter = (
+  createRouter()
+    .use(sessionMiddleware)
+    .use(
+      requireRoleMiddleware(
+        ["TEACHER", "ADMIN", "STUDENT"],
+        checkStudentOwnProfile
+      )
+    ) as AppOpenAPI
+).openapi(rout, handler);
 
 export default getUserRouter;

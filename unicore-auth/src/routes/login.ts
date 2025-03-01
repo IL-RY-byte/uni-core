@@ -1,10 +1,6 @@
 import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
-import {
-  generateSessionId,
-  signString,
-  verifyPassword,
-} from "@lib/cryptography";
+import { generateSessionId, verifyPassword } from "@lib/cryptography";
 import { getUserWithRoles } from "@lib/db-utils";
 import {
   LoginResponseSchema,
@@ -15,6 +11,7 @@ import { storeSession } from "@lib/session-utils";
 import { setCookie } from "hono/cookie";
 import { AppContext } from "@lib/types";
 import { getDB } from "unicore-db";
+import { sign } from "hono/jwt";
 
 const rout = createRoute({
   path: "/login",
@@ -36,7 +33,7 @@ const rout = createRoute({
         },
       },
       description:
-        "Successfully authenticated. Returns a signed session token in JSON and sets it as an HTTP-only cookie.",
+        "Successfully authenticated. Returns a JWT token in JSON and sets it as an HTTP-only cookie.",
     },
     401: {
       content: {
@@ -56,7 +53,7 @@ const rout = createRoute({
     },
   },
   description:
-    "Authenticates a user and returns a signed session token. The token is also stored as an HTTP-only cookie.",
+    "Authenticates a user and returns a JWT token. The token is also stored as an HTTP-only cookie.",
 });
 
 const optionsRout = createRoute({
@@ -104,7 +101,9 @@ async function postHandler(c: AppContext) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
-    if (!(await verifyPassword(password, user.passwordHash, user.passwordSalt))) {
+    if (
+      !(await verifyPassword(password, user.passwordHash, user.passwordSalt))
+    ) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
@@ -115,21 +114,24 @@ async function postHandler(c: AppContext) {
       roles: user.roles,
     });
 
-    // Sign session and set token
-    const signature = await signString(
-      sessionId,
-      c.env.ACCESS_TOKEN_SECRET,
-      "SHA-256"
-    );
-    const token = `${sessionId}.${signature}`;
+    // Prepare JWT payload with sessionId, userId, roles, issued-at, and expiration.
+    const now = Math.floor(Date.now() / 1000);
+    const payload = {
+      sessionId: sessionId,
+      userId: user.idUser,
+      roles: user.roles,
+      iat: now,
+      exp: now + 3600, // expires in 1 hour
+    };
+
+    // Create the JWT token.
+    const token = await sign(payload, c.env.ACCESS_TOKEN_SECRET);
 
     // Set HTTP-only cookie with the token using the configured cookie domain.
     setCookie(c, "token", token, {
       httpOnly: true,
       secure: true,
       domain: c.env.COOKIE_DOMAIN,
-      path: "/",
-      sameSite: "none"
     });
 
     return c.json({ token }, 200);
