@@ -4,7 +4,7 @@ import requireRoleMiddleware from "middlewares/roleMiddleware";
 import sessionMiddleware from "middlewares/sessionMiddleware";
 import { getDB } from "unicore-db";
 
-const router = createRouter().use(sessionMiddleware).use(requireRoleMiddleware("ADMIN"));
+const router = createRouter().use(sessionMiddleware).use(requireRoleMiddleware(["ADMIN"]));
 
 router.get(
   "/",
