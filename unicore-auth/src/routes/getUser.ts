@@ -19,10 +19,11 @@ const rout = createRoute({
     {
       name: "idUser",
       in: "query",
-      required: true,
+      required: false,
       schema: {
         type: "integer",
-        description: "The ID of the user to retrieve.",
+        description:
+          "The ID of the user to retrieve. If not provided, returns the current user's info from the token.",
         example: 1234,
       },
     },
@@ -42,7 +43,8 @@ const rout = createRoute({
           schema: ErrorResponseSchema,
         },
       },
-      description: "Bad request. The 'idUser' query parameter is missing or invalid.",
+      description:
+        "Bad request. The 'idUser' query parameter is invalid.",
     },
     403: {
       content: {
@@ -70,13 +72,29 @@ const rout = createRoute({
     },
   },
   description:
-    "Retrieves user details along with profile info and roles by user ID.",
+    "Retrieves user details along with profile info and roles by user ID. If no idUser is provided, returns the info of the currently authenticated user.",
 });
+
 
 async function handler(c: AppContext) {
   try {
-    const idUser = c.req.query("idUser");
-    const requestedUserId = Number(idUser);
+    const idUserQuery = c.req.query("idUser");
+    let requestedUserId: number;
+
+    if (!idUserQuery) {
+      // If no query parameter, extract the userId from the token's session.
+      const session = (c as SessionContext).get("userSession") as UserSession;
+      requestedUserId = Number(session.userId);
+    } else {
+      requestedUserId = Number(idUserQuery);
+      if (isNaN(requestedUserId)) {
+        return c.json(
+          { message: "Bad request: Invalid idUser parameter" },
+          400
+        );
+      }
+    }
+
     const db = getDB(c.env);
 
     // Retrieve the user record from the database.
@@ -153,9 +171,13 @@ async function handler(c: AppContext) {
 
 // Extra check function: if the user is a STUDENT, they can only access their own profile.
 const checkStudentOwnProfile = (user: UserSession, c: SessionContext) => {
-  if (user.roles.includes("STUDENT")) {
-    const idUser = c.req.query("idUser");
-    return Number(idUser) === Number(user.userId);
+  if (user.roles.includes("STUDENT") && user.roles.length == 1) {
+    const idUserQuery = c.req.query("idUser");
+    if (!idUserQuery) {
+      // No query parameter: they are accessing their own profile.
+      return true;
+    }
+    return Number(idUserQuery) === Number(user.userId);
   }
   return true;
 };
