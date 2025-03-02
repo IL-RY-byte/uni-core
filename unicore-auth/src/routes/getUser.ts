@@ -11,6 +11,7 @@ import {
 import { getDB } from "unicore-db";
 import requireRoleMiddleware from "../middlewares/roleMiddleware";
 import sessionMiddleware from "middlewares/sessionMiddleware";
+import { cors } from "hono/cors";
 
 const rout = createRoute({
   path: "/get_user",
@@ -43,8 +44,7 @@ const rout = createRoute({
           schema: ErrorResponseSchema,
         },
       },
-      description:
-        "Bad request. The 'idUser' query parameter is invalid.",
+      description: "Bad request. The 'idUser' query parameter is invalid.",
     },
     403: {
       content: {
@@ -75,8 +75,9 @@ const rout = createRoute({
     "Retrieves user details along with profile info and roles by user ID. If no idUser is provided, returns the info of the currently authenticated user.",
 });
 
-
 async function handler(c: AppContext) {
+  c.header("Access-Control-Allow-Origin", c.env.ALLOWED_ORIGIN);
+
   try {
     const idUserQuery = c.req.query("idUser");
     let requestedUserId: number;
@@ -184,6 +185,14 @@ const checkStudentOwnProfile = (user: UserSession, c: SessionContext) => {
 
 const getUserRouter = (
   createRouter()
+    .use(async (c, next) => {
+      const corsMiddlewareHandler = cors({
+        origin: c.env.ALLOWED_ORIGIN,
+        allowMethods: ["POST", "GET", "OPTIONS"],
+        allowHeaders: ["Content-Type"],
+      });
+      return corsMiddlewareHandler(c, next);
+    })
     .use(sessionMiddleware)
     .use(
       requireRoleMiddleware(
