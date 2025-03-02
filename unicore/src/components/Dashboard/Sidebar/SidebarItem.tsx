@@ -1,7 +1,6 @@
 "use client";
 
 import type { IconProps } from "@tabler/icons-react";
-import type { ReactNode } from "react";
 
 export interface SidebarItemProps {
   icon: React.FC<IconProps>;

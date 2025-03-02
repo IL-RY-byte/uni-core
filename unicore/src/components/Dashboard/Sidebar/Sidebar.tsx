@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SidebarSection from "./SidebarSection";
 import {
   IconBell,
@@ -12,6 +12,7 @@ import {
   IconUsers,
   IconProps,
 } from "@tabler/icons-react";
+import { SessionContext } from "@/context/SessionContext";
 
 interface MenuItem {
   name: string;
@@ -22,14 +23,15 @@ interface MenuItem {
 interface AccountItem {
   name: string;
   icon: React.FC<IconProps>;
+  callback: () => void;
 }
 
 const Sidebar = () => {
   const [selected, setSelected] = useState("Catalog");
+  const { logout } = useContext(SessionContext);
 
   const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: IconLayoutDashboard, section: "Quick access" },
-    { name: "Catalog", icon: IconBook, section: "Services" },
     { name: "Operations", icon: IconBook, section: "Services" },
     { name: "Users", icon: IconUsers, section: "Services" },
     { name: "Branches", icon: IconBuilding, section: "Services" },
@@ -37,8 +39,8 @@ const Sidebar = () => {
   ];
 
   const accountItems: AccountItem[] = [
-    { name: "Log Out", icon: IconLogout },
-    { name: "Notifications", icon: IconBell },
+    { name: "Log Out", icon: IconLogout, callback: logout },
+    { name: "Notifications", icon: IconBell, callback: () => {} },
   ];
 
   const groupedMenuItems = menuItems.reduce<Record<string, MenuItem[]>>(
@@ -76,9 +78,7 @@ const Sidebar = () => {
           items={accountItems.map((item) => ({
             title: item.name,
             icon: item.icon,
-            callback: () => {
-              /* add account action here */
-            },
+            callback: item.callback,
             active: false,
           }))}
         />

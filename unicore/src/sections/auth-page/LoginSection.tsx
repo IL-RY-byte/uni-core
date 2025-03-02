@@ -48,11 +48,13 @@ const LoginSection = () => {
     if (!newErrors.email && !newErrors.password) {
       setLoading(true);
       try {
-        const loginResponse = await loginService({
+        // API handles setting cookie via Set-Cookie header in response
+        await loginService({
           login: formData.email,
           password: formData.password,
         });
-        console.log("Login successful:", loginResponse);
+        // console.log("Login successful:", loginResponse);
+        router.push("/dash");
       } catch (error) {
         setErrors((prev) => ({ ...prev, server: (error as Error).message }));
       } finally {
