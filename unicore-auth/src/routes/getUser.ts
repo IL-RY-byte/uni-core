@@ -76,8 +76,6 @@ const rout = createRoute({
 });
 
 async function handler(c: AppContext) {
-  c.header("Access-Control-Allow-Origin", c.env.ALLOWED_ORIGIN);
-
   try {
     const idUserQuery = c.req.query("idUser");
     let requestedUserId: number;
@@ -190,6 +188,7 @@ const getUserRouter = (
         origin: c.env.ALLOWED_ORIGIN,
         allowMethods: ["POST", "GET", "OPTIONS"],
         allowHeaders: ["Content-Type"],
+        credentials: true,
       });
       return corsMiddlewareHandler(c, next);
     })
