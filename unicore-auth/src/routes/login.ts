@@ -131,7 +131,10 @@ async function postHandler(c: AppContext) {
     setCookie(c, "token", token, {
       httpOnly: true,
       secure: true,
-      domain: c.env.COOKIE_DOMAIN,
+      sameSite: "none",
+      ...(c.env.COOKIE_DOMAIN !== "localhost" && {
+        domain: c.env.COOKIE_DOMAIN,
+      }),
     });
 
     return c.json({ token }, 200);
