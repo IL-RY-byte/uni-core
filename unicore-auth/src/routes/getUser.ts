@@ -12,6 +12,7 @@ import { getDB } from "unicore-db";
 import requireRoleMiddleware from "../middlewares/roleMiddleware";
 import sessionMiddleware from "middlewares/sessionMiddleware";
 import { cors } from "hono/cors";
+import { jwtMiddleware } from "middlewares/jwtMiddleware";
 
 const rout = createRoute({
   path: "/get_user",
@@ -183,17 +184,19 @@ const checkStudentOwnProfile = (user: UserSession, c: SessionContext) => {
 
 const getUserRouter = (
   createRouter()
-    .use(async (c, next) => {
+    .use("/get_user", async (c, next) => {
       const corsMiddlewareHandler = cors({
         origin: c.env.ALLOWED_ORIGIN,
-        allowMethods: ["POST", "GET", "OPTIONS"],
-        allowHeaders: ["Content-Type"],
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowHeaders: ["Authorization", "Content-Type"],
         credentials: true,
       });
       return corsMiddlewareHandler(c, next);
     })
-    .use(sessionMiddleware)
+    .use("/get_user", jwtMiddleware)
+    .use("/get_user", sessionMiddleware)
     .use(
+      "/get_user",
       requireRoleMiddleware(
         ["TEACHER", "ADMIN", "STUDENT"],
         checkStudentOwnProfile

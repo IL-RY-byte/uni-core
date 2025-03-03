@@ -9,10 +9,10 @@ import logoutRouter from "@routes/logout";
 const app = createApp();
 setupDocs(app);
 
+app.route("/", getUserRouter);
 app.route("/", loginRouter);
 app.route("/", logoutRouter);
 app.route("/", createUserRouter);
-app.route("/", getUserRouter);
 app.route("/protected", exampleProtected);
 
 export default app;
