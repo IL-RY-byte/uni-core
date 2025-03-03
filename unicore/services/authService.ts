@@ -97,13 +97,17 @@ export interface ErrorResponse {
  * Otherwise, it calls the endpoint without the query parameter to return
  * the current user's info (decoded from the HTTP-only JWT token).
  */
-export const getUser = async (idUser?: number): Promise<GetUserResponse> => {
+export async function getUser(
+  token: string,
+  idUser?: number
+): Promise<GetUserResponse> {
   let url = (process.env as unknown as Env).NEXT_PUBLIC_API_URL + "/get_user";
   if (typeof idUser !== "undefined") {
     url += `?idUser=${idUser}`;
   }
   const response = await fetch(url, {
     credentials: "include",
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   if (!response.ok) {
@@ -114,7 +118,7 @@ export const getUser = async (idUser?: number): Promise<GetUserResponse> => {
 
   const userData: GetUserResponse = await response.json();
   return userData;
-};
+}
 
 /**
  * Calls the /logout endpoint to clear the user's session.

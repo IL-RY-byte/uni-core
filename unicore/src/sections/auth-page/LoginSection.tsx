@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { login as loginService } from "@services/authService";
+import { setCookie } from "@/lib/cookies";
 
 const LoginSection = () => {
   const [visible, { toggle }] = useDisclosure(false);
@@ -49,12 +50,13 @@ const LoginSection = () => {
       setLoading(true);
       try {
         // API handles setting cookie via Set-Cookie header in response
-        await loginService({
+        const r = await loginService({
           login: formData.email,
           password: formData.password,
         });
-        // console.log("Login successful:", loginResponse);
-        router.push("/dash");
+        setCookie("token", r.token);
+        console.log("Login successful:", r.token);
+        // router.push("/dash");
       } catch (error) {
         setErrors((prev) => ({ ...prev, server: (error as Error).message }));
       } finally {

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { GetUserResponse } from "@services/authService";
 import { getUser, logout as authLogout } from "@services/authService";
+import { getCookie } from "@/lib/cookies";
 
 interface SessionContextType {
   user: GetUserResponse | null;
@@ -30,7 +31,9 @@ export function SessionProvider({ children }: SessionProviderProps) {
   const refetch = async () => {
     setLoading(true);
     try {
-      const data = await getUser();
+      const token = getCookie("token");
+      if (!token) throw Error("No token cookie found.");
+      const data = await getUser(token);
       setUser(data);
     } catch (error) {
       console.error("Error fetching user:", error);
