@@ -21,6 +21,12 @@ interface MenuItem {
   href?: string;
 }
 
+interface AccountItem {
+  name: string;
+  icon: React.FC<IconProps>;
+  callback: () => void;
+}
+
 const Sidebar = () => {
   const router = useRouter();
   const [selected, setSelected] = useState("Catalog");
@@ -44,10 +50,11 @@ const Sidebar = () => {
     { name: "Map", icon: IconMap, section: "Services", href: "/dash/map" },
   ];
 
-  const accountItems = [
-    { name: "Log Out", icon: IconLogout },
-    { name: "Notifications", icon: IconBell },
+  const accountItems: AccountItem[] = [
+    // { name: "Log Out", icon: IconLogout, callback: logout },
+    { name: "Notifications", icon: IconBell, callback: () => {} },
   ];
+
 
   const groupedMenuItems = menuItems.reduce<Record<string, MenuItem[]>>(
     (acc, item) => {
