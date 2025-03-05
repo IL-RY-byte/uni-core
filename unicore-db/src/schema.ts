@@ -34,7 +34,6 @@ export const user = sqliteTable("User", {
   login: text("login").notNull().unique(),
   passwordHash: text("passwordHash").notNull(),
   passwordSalt: text("passwordSalt").notNull(),
-  // Foreign key referencing ProfileInfo.
   idProfileInfo: integer("idProfileInfo").references(
     () => profileInfo.idProfileInfo
   ),
@@ -80,6 +79,44 @@ export const userRole = sqliteTable("UserRole", {
   entryStatus: integer("entryStatus").default(1).notNull(),
 });
 
+/**
+ * Post Table
+ */
+export const post = sqliteTable("Post", {
+  idPost: integer("idPost").primaryKey({ autoIncrement: true }),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  idAuthor: integer("idAuthor")
+    .notNull()
+    .references(() => user.idUser),
+  previewImage: text("previewImage"),
+  createdAt: text("createdAt")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updatedAt: text("updatedAt"),
+  entryStatus: integer("entryStatus").default(1).notNull(),
+});
+
+/**
+ * PostRolesAllowed Table
+ */
+export const postRolesAllowed = sqliteTable("PostRolesAllowed", {
+  idPostRolesAllowed: integer("idPostRolesAllowed").primaryKey({
+    autoIncrement: true,
+  }),
+  idPost: integer("idPost")
+    .notNull()
+    .references(() => post.idPost),
+  idRole: integer("idRole")
+    .notNull()
+    .references(() => role.idRole),
+  createdAt: text("createdAt")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updatedAt: text("updatedAt"),
+  entryStatus: integer("entryStatus").default(1).notNull(),
+});
+
 /* =====================================================
    Define Relationships Using Drizzle's relations()
    ===================================================== */
@@ -95,6 +132,7 @@ export const userRelations = relations(user, ({ one, many }) => ({
     references: [profileInfo.idProfileInfo],
   }),
   userRoles: many(userRole),
+  posts: many(post),
 }));
 
 /**
@@ -119,3 +157,25 @@ export const userRoleRelations = relations(userRole, ({ one }) => ({
     references: [role.idRole],
   }),
 }));
+
+export const postRelations = relations(post, ({ one, many }) => ({
+  author: one(user, {
+    fields: [post.idAuthor],
+    references: [user.idUser],
+  }),
+  postRolesAllowed: many(postRolesAllowed),
+}));
+
+export const postRolesAllowedRelations = relations(
+  postRolesAllowed,
+  ({ one }) => ({
+    post: one(post, {
+      fields: [postRolesAllowed.idPost],
+      references: [post.idPost],
+    }),
+    role: one(role, {
+      fields: [postRolesAllowed.idRole],
+      references: [role.idRole],
+    }),
+  })
+);

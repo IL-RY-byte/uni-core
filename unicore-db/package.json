@@ -10,8 +10,8 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "drizzle-kit": "^0.30.4",
-    "drizzle-orm": "^0.39.1"
+    "drizzle-kit": "^0.30.5",
+    "drizzle-orm": "^0.39.3"
   },
   "devDependencies": {
     "@types/node": "^22.13.0"
