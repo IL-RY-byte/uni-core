@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SidebarSection from "./SidebarSection";
 import {
   IconBell,
@@ -13,6 +13,7 @@ import {
   IconUsers,
   IconProps,
 } from "@tabler/icons-react";
+import { SessionContext } from "@/context/SessionContext";
 
 interface MenuItem {
   name: string;
@@ -30,6 +31,7 @@ interface AccountItem {
 const Sidebar = () => {
   const router = useRouter();
   const [selected, setSelected] = useState("Catalog");
+  const { logout } = useContext(SessionContext);
 
   const menuItems: MenuItem[] = [
     {
@@ -51,7 +53,7 @@ const Sidebar = () => {
   ];
 
   const accountItems: AccountItem[] = [
-    // { name: "Log Out", icon: IconLogout, callback: logout },
+    { name: "Log Out", icon: IconLogout, callback: logout },
     { name: "Notifications", icon: IconBell, callback: () => {} },
   ];
 
@@ -94,9 +96,8 @@ const Sidebar = () => {
           items={accountItems.map((item) => ({
             title: item.name,
             icon: item.icon,
-            callback: () => {
-              /* add account action here */
-            },
+            callback: item.callback,
+            active: false,
           }))}
         />
       </div>

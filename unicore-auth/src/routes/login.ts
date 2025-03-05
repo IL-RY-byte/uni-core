@@ -1,10 +1,6 @@
 import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
-import {
-  generateSessionId,
-  signString,
-  verifyPassword,
-} from "@lib/cryptography";
+import { generateSessionId, verifyPassword } from "@lib/cryptography";
 import { getUserWithRoles } from "@lib/db-utils";
 import {
   LoginResponseSchema,
@@ -12,9 +8,10 @@ import {
   ErrorResponseSchema,
 } from "@lib/schemas";
 import { storeSession } from "@lib/session-utils";
-import { setCookie } from "hono/cookie";
-import { AppContext } from "@lib/types";
+import { AppContext, AppOpenAPI } from "@lib/types";
 import { getDB } from "unicore-db";
+import { sign } from "hono/jwt";
+import { cors } from "hono/cors";
 
 const rout = createRoute({
   path: "/login",
@@ -36,7 +33,7 @@ const rout = createRoute({
         },
       },
       description:
-        "Successfully authenticated. Returns a signed session token in JSON and sets it as an HTTP-only cookie.",
+        "Successfully authenticated. Returns a JWT token in JSON and sets it as an HTTP-only cookie.",
     },
     401: {
       content: {
@@ -56,37 +53,7 @@ const rout = createRoute({
     },
   },
   description:
-    "Authenticates a user and returns a signed session token. The token is also stored as an HTTP-only cookie.",
-});
-
-const optionsRout = createRoute({
-  path: "/login",
-  method: "options",
-  responses: {
-    200: {
-      description: "Preflight CORS text response.",
-      headers: {
-        "Access-Control-Allow-Origin": {
-          schema: { type: "string", example: "Configured via ENV_MODE" },
-          description:
-            "Allowed origin, set automatically from environment configuration.",
-        },
-        "Access-Control-Allow-Credentials": {
-          schema: { type: "string", example: "true" },
-          description: "Indicates that credentials are allowed.",
-        },
-        "Access-Control-Allow-Methods": {
-          schema: { type: "string", example: "GET, POST, OPTIONS" },
-          description: "Allowed HTTP methods.",
-        },
-        "Access-Control-Allow-Headers": {
-          schema: { type: "string", example: "Content-Type" },
-          description: "Allowed headers.",
-        },
-      },
-    },
-  },
-  description: "CORS preflight text response for the login endpoint.",
+    "Authenticates a user and returns a JWT token. The token is also stored as an HTTP-only cookie.",
 });
 
 async function postHandler(c: AppContext) {
@@ -104,7 +71,9 @@ async function postHandler(c: AppContext) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
-    if (!(await verifyPassword(password, user.passwordHash, user.passwordSalt))) {
+    if (
+      !(await verifyPassword(password, user.passwordHash, user.passwordSalt))
+    ) {
       return c.json({ message: "Invalid credentials." }, 401);
     }
 
@@ -115,20 +84,25 @@ async function postHandler(c: AppContext) {
       roles: user.roles,
     });
 
-    // Sign session and set token
-    const signature = await signString(
-      sessionId,
-      c.env.ACCESS_TOKEN_SECRET,
-      "SHA-256"
-    );
-    const token = `${sessionId}.${signature}`;
+    // Prepare JWT payload with sessionId, userId, roles, issued-at, and expiration.
+    const now = Math.floor(Date.now() / 1000);
+    const payload = {
+      sessionId: sessionId,
+      userId: user.idUser,
+      roles: user.roles,
+      iat: now,
+      exp: now + 3600, // expires in 1 hour
+    };
+
+    // Create the JWT token.
+    const token = await sign(payload, c.env.ACCESS_TOKEN_SECRET);
 
     // Set HTTP-only cookie with the token using the configured cookie domain.
-    setCookie(c, "token", token, {
-      httpOnly: true,
-      secure: true,
-      domain: c.env.COOKIE_DOMAIN,
-    });
+    // setCookie(c, "token", token, {
+    //   secure: true,
+    //   sameSite: "none",
+    // });
+
 
     return c.json({ token }, 200);
   } catch (error) {
@@ -137,17 +111,16 @@ async function postHandler(c: AppContext) {
   }
 }
 
-async function optionsHandler(c: AppContext) {
-  // Set CORS headers for OPTIONS requests.
-  c.header("Access-Control-Allow-Origin", c.env.ALLOWED_ORIGIN);
-  c.header("Access-Control-Allow-Credentials", "true");
-  c.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  c.header("Access-Control-Allow-Headers", "Content-Type");
-  return c.text("", { status: 200 });
-}
-
-const loginRouter = createRouter()
-  .openapi(rout, postHandler)
-  .openapi(optionsRout, optionsHandler);
+const loginRouter = (createRouter()
+  .use("/login", async (c, next) => {
+    const corsMiddlewareHandler = cors({
+      origin: c.env.ALLOWED_ORIGIN,
+      allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowHeaders: ["Content-Type"],
+      credentials: true,
+    });
+    return corsMiddlewareHandler(c, next);
+  }) as AppOpenAPI)
+  .openapi(rout, postHandler);
 
 export default loginRouter;
