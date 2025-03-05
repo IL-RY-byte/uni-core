@@ -13,11 +13,13 @@ import {
   IconProps,
 } from "@tabler/icons-react";
 import { SessionContext } from "@/context/SessionContext";
+import { useRouter } from "next/navigation";
 
 interface MenuItem {
   name: string;
   icon: React.FC<IconProps>;
   section: string;
+  callback: () => void;
 }
 
 interface AccountItem {
@@ -29,13 +31,49 @@ interface AccountItem {
 const Sidebar = () => {
   const [selected, setSelected] = useState("Catalog");
   const { logout } = useContext(SessionContext);
+  const router = useRouter();
 
   const menuItems: MenuItem[] = [
-    { name: "Dashboard", icon: IconLayoutDashboard, section: "Quick access" },
-    { name: "Operations", icon: IconBook, section: "Services" },
-    { name: "Users", icon: IconUsers, section: "Services" },
-    { name: "Branches", icon: IconBuilding, section: "Services" },
-    { name: "Map", icon: IconMap, section: "Services" },
+    {
+      name: "Dashboard",
+      icon: IconLayoutDashboard,
+      section: "Quick access",
+      callback: () => {
+        router.push("/dash");
+      },
+    },
+    {
+      name: "Operations",
+      icon: IconBook,
+      section: "Services",
+      callback: () => {
+        router.push("/dash");
+      },
+    },
+    {
+      name: "Users",
+      icon: IconUsers,
+      section: "Services",
+      callback: () => {
+        router.push("/dash");
+      },
+    },
+    {
+      name: "Branches",
+      icon: IconBuilding,
+      section: "Services",
+      callback: () => {
+        router.push("/dash");
+      },
+    },
+    {
+      name: "Map",
+      icon: IconMap,
+      section: "Services",
+      callback: () => {
+        router.push("/dash/map");
+      },
+    },
   ];
 
   const accountItems: AccountItem[] = [
@@ -65,7 +103,10 @@ const Sidebar = () => {
             items={items.map((item) => ({
               title: item.name,
               icon: item.icon,
-              callback: () => setSelected(item.name),
+              callback: () => {
+                setSelected(item.name);
+                item.callback();
+              },
               active: selected === item.name,
             }))}
           />
