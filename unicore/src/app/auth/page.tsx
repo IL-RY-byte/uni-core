@@ -1,9 +1,11 @@
+import AuthPageSection from "@/sections/auth-page/AuthPageSection";
+
 const Page = () => {
-    return (
-      <>
-      <p>auth</p>
-      </>
-    );
-  };
-  
-  export default Page;
+  return (
+    <>
+      <AuthPageSection />
+    </>
+  );
+};
+
+export default Page;

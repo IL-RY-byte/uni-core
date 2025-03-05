@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LogoImage from "../../images/logo.png";
+import { IconMenu2 } from "@tabler/icons-react";
 
 const navLinks = [
   { name: "Features", path: "/auth" },
@@ -17,7 +18,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="w-full lg:h-[80px] md:h-[60px] h-[50px] bg-white border-b-[2px] border-gray-100 flex items-center">
+    <header className="fixed top-0 left-0 w-full z-50 lg:h-[80px] md:h-[60px] h-[50px] bg-white flex items-center shadow-sm">
       <div className="container flex justify-between items-center">
         <button
           className="flex items-center gap-[10px]"
@@ -48,15 +49,14 @@ const Header = () => {
         </nav>
 
         <button
-          className="md:hidden text-black text-2xl"
+          className="md:hidden text-black"
           onClick={() => setIsOpen(!isOpen)}
         >
-          ☰ 
-        </button> 
-        {/* тут потім заміним на іконку */}
+          <IconMenu2 size={32} stroke={2} />
+        </button>
 
         {isOpen && (
-          <div className="absolute top-[60px] left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4 md:hidden transition-all duration-300 ease-in-out">
+          <div className="z-10 absolute top-[60px] left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4 md:hidden transition-all duration-300 ease-in-out">
             {navLinks.map((link) => (
               <button
                 key={link.path}

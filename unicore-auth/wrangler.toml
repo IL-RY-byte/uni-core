@@ -32,10 +32,14 @@ preview_id = "137cf26972d44eb9b45bb7881cc08be6"
 # Environment Variables
 # https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 [vars]
+
 ACCESS_TOKEN_SECRET = "U5LoOfj2Fp9zpHK1uLbLSQ=="
 ALLOWED_ORIGIN = "http://localhost:3000"
+
 COOKIE_DOMAIN = "localhost"
-API_BASE_URL = "https://uni-core-auth.unicore-feedback.workers.dev/" 
+#API_BASE_URL = "https://uni-core-auth.unicore-feedback.workers.dev/" 
+API_BASE_URL = "http://localhost:8787"
+
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/

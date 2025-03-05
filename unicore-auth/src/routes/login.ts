@@ -103,6 +103,7 @@ async function postHandler(c: AppContext) {
     //   sameSite: "none",
     // });
 
+
     return c.json({ token }, 200);
   } catch (error) {
     console.error(error);
