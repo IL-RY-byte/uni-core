@@ -2,8 +2,9 @@ import { createRouter } from "../lib/create-app";
 import { createRoute } from "@hono/zod-openapi";
 import { deleteSession } from "@lib/session-utils";
 import { deleteCookie, getCookie } from "hono/cookie";
-import { AppContext } from "@lib/types";
+import { AppContext, AppOpenAPI } from "@lib/types";
 import { AuthCookieSchema } from "@lib/schemas";
+import { cors } from "hono/cors";
 
 const rout = createRoute({
   path: "/logout",
@@ -51,6 +52,16 @@ async function handler(c: AppContext) {
   return c.json({ success: true, message: "Logged out successfully." }, 200);
 }
 
-const logoutRouter = createRouter().openapi(rout, handler);
+const logoutRouter = (createRouter()
+  .use(async (c, next) => {
+    const corsMiddlewareHandler = cors({
+      origin: c.env.ALLOWED_ORIGIN,
+      allowMethods: ["POST", "GET", "OPTIONS"],
+      allowHeaders: ["Content-Type"],
+      credentials: true,
+    });
+    return corsMiddlewareHandler(c, next);
+  }) as AppOpenAPI)
+  .openapi(rout, handler);
 
 export default logoutRouter;

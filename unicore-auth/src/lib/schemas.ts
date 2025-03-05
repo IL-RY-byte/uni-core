@@ -74,3 +74,17 @@ export const CreateUserResponseSchema = z.object({
   surname: z.string().describe("User's surname."),
   profileInfo: ProfileInfoSchema.describe("User's profile information."),
 });
+
+
+/*
+* GetUser
+*/
+
+export const GetUserResponseSchema = z.object({
+  idUser: z.number().describe("Unique identifier for the user."),
+  login: z.string().describe("User's login."),
+  name: z.string().describe("User's first name."),
+  surname: z.string().describe("User's surname."),
+  profileInfo: ProfileInfoSchema.nullable().describe("User's profile information. Returns null if not set."),
+  roles: z.array(z.string()).describe("List of role titles assigned to the user."),
+});
