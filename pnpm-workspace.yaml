@@ -2,3 +2,4 @@ packages:
   - "unicore"
   - "unicore-auth"
   - "unicore-db"
+  - "unicore-schedule"

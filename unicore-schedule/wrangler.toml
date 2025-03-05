@@ -1,0 +1,17 @@
+name = "uni-core-schedule"
+main = "src/index.ts"
+
+[observability]
+enabled = true
+
+[vars]
+ALLOWED_ORIGIN = "http://localhost:3000"
+COOKIE_DOMAIN = "localhost"
+#API_BASE_URL = "https://uni-core-schedule.unicore-feedback.workers.dev/"
+API_BASE_URL = "http://localhost:3000"
+
+TENANT_ID = "2d9f7249-ee69-4e88-b99c-a994fc8454bc"
+
+CLIENT_ID = "bf8e13ca-d7ba-48cf-bcb3-2793d13fcdc1"
+
+#GRAPH_API_URL = "https://graph.microsoft.com/v1.0"
